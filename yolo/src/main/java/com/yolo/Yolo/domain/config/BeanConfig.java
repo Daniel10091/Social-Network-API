@@ -1,4 +1,4 @@
-package com.yolo.Yolo.domain.config.interfaces;
+package com.yolo.Yolo.domain.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

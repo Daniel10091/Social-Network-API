@@ -11,9 +11,13 @@ import com.yolo.Yolo.domain.entity.model.Person;
 public interface PersonMapper {
   
   @Mapping(source = "person.id", target = "code")
-  PersonDTO toDto(Person person);
+  static PersonDTO toDto(Person person) {
+    throw new UnsupportedOperationException("Unimplemented method 'toDto'");
+  }
 
   @InheritInverseConfiguration
-  Person toEntity(PersonDTO personDTO);
+  static Person toEntity(PersonDTO personDTO) {
+    throw new UnsupportedOperationException("Unimplemented method 'toEntity'");
+  }
 
 }

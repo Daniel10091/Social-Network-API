@@ -19,11 +19,9 @@ import jakarta.transaction.Transactional;
 public class PersonServiceImpl implements PersonService {
 
   private final PersonRepository personRepository;
-  private final PersonMapper personMapper;
 
-  public PersonServiceImpl(PersonRepository personRepository, PersonMapper personMapper) {
+  public PersonServiceImpl(PersonRepository personRepository) {
     this.personRepository = personRepository;
-    this.personMapper = personMapper;
   }
 
   @Override
@@ -51,7 +49,7 @@ public class PersonServiceImpl implements PersonService {
 
       if (personRepository.findPersonByFirstNameAndLastName(
           personDTO.getFirstName(), personDTO.getLastName()) == null) {
-        newPerson = personMapper.toEntity(personDTO);
+        newPerson = PersonMapper.toEntity(personDTO);
         saveReturn = personRepository.save(newPerson);
       } else {
         throw new PersonAlreadyExistException(
