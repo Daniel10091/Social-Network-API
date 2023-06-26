@@ -1,4 +1,4 @@
-package com.yolo.yolo;
+package com.yolo.Yolo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,8 +1,15 @@
-package com.yolo.yolo.domain.entity.dto;
+package com.yolo.Yolo.domain.entity.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class PersonDTO {
   
   private Long code;

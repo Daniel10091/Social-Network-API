@@ -1,11 +1,11 @@
-package com.yolo.yolo.domain.entity.mapper;
+package com.yolo.Yolo.domain.entity.mapper;
 
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.yolo.yolo.domain.entity.dto.PersonDTO;
-import com.yolo.yolo.domain.entity.model.Person;
+import com.yolo.Yolo.domain.entity.dto.PersonDTO;
+import com.yolo.Yolo.domain.entity.model.Person;
 
 @Mapper
 public interface PersonMapper {
