@@ -1,0 +1,4 @@
+https://www.youtube.com/watch?v=s6MxctqfBWg
+https://stackoverflow.com/questions/52034082/how-to-set-header-x-content-type-options-nosniff-in-springboot-application
+https://www.baeldung.com/spring-deprecated-websecurityconfigureradapter
+https://www.baeldung.com/spring-enablemethodsecurity
