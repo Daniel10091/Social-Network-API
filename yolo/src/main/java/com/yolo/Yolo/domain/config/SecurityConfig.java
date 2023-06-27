@@ -14,18 +14,18 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
-  @Bean
-  UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-    manager.createUser(User.withUsername("user")
-        .password(bCryptPasswordEncoder.encode("userPass"))
-        .roles("USER")
-        .build());
-    manager.createUser(User.withUsername("admin")
-        .password(bCryptPasswordEncoder.encode("adminPass"))
-        .roles("USER", "ADMIN")
-        .build());
-    return manager;
-  }
+  // @Bean
+  // UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
+  //   InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+  //   manager.createUser(User.withUsername("user")
+  //       .password(bCryptPasswordEncoder.encode("userPass"))
+  //       .roles("USER")
+  //       .build());
+  //   manager.createUser(User.withUsername("admin")
+  //       .password(bCryptPasswordEncoder.encode("adminPass"))
+  //       .roles("USER", "ADMIN")
+  //       .build());
+  //   return manager;
+  // }
 
 }
