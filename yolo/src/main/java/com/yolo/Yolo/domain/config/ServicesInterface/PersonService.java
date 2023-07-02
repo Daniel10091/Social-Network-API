@@ -30,4 +30,10 @@ public interface PersonService {
    */
   public Person updatePerson(PersonDTO personDTO);
 
+  /**
+   * @param id
+   * @return
+   */
+  public void deletePerson(Long id);
+
 }
