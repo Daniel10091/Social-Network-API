@@ -6,13 +6,16 @@ CREATE DATABASE `db_yolo` WITH OWNER = postgres ENCODING = 'UTF8' TABLESPACE = p
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_people` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` BINARY(16) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(45) NOT NULL,
   `last_name` varchar(45) NOT NULL,
+  `gender` varchar(1) DEFAULT "N" NOT NULL,
+  `birthdate` date NOT NULL,
   `age` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  CONSTRAINT ck_people CHECK (gender IN ("F", "M", "N")),
+  CONSTRAINT pk_people PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 ```
 
@@ -21,12 +24,12 @@ CREATE TABLE `tbl_people` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_phones` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `phone` varchar(45) NOT NULL,
-  `person_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
+  `person_id` binary(16) NOT NULL,
+  CONSTRAINT pk_phones PRIMARY KEY (`id`),
   KEY `fk_phones_persons_idx` (`person_id`),
-  CONSTRAINT `fk_phones_persons` FOREIGN KEY (`person_id`) REFERENCES `tbl_persons` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_phones_persons` FOREIGN KEY (`person_id`) REFERENCES `tbl_people` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2001 DEFAULT CHARSET=utf8;
 ```
 
@@ -35,12 +38,12 @@ CREATE TABLE `tbl_phones` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_emails` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `email` varchar(45) NOT NULL,
-  `person_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
+  `person_id` binary(16) NOT NULL,
+  CONSTRAINT pk_emails PRIMARY KEY (`id`),
   KEY `fk_emails_persons_idx` (`person_id`),
-  CONSTRAINT `fk_emails_persons` FOREIGN KEY (`person_id`) REFERENCES `tbl_persons` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_emails_persons` FOREIGN KEY (`person_id`) REFERENCES `tbl_people` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2001 DEFAULT CHARSET=utf8;
 ```
 
@@ -49,12 +52,16 @@ CREATE TABLE `tbl_emails` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_addresses` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `address` varchar(45) NOT NULL,
-  `person_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  -- `address` varchar(45) NOT NULL,
+  `street` varchar(100) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `state` varchar(100) NOT NULL,
+  `zip` varchar(100) NOT NULL,
+  `person_id` binary(16) NOT NULL,
+  CONSTRAINT pk_address PRIMARY KEY (`id`),
   KEY `fk_addresses_persons_idx` (`person_id`),
-  CONSTRAINT `fk_addresses_persons` FOREIGN KEY (`person_id`) REFERENCES `tbl_persons` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_addresses_persons` FOREIGN KEY (`person_id`) REFERENCES `tbl_people` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2001 DEFAULT CHARSET=utf8;
 ```
 
@@ -63,14 +70,20 @@ CREATE TABLE `tbl_addresses` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL,
+  `avatar` LONGBLOB NOT NULL,
+  `background` LONGBLOB NOT NULL,
   `username` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `salt` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `email` varchar(45) NOT NULL,
   `enabled` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  CONSTRAINT pk_users PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
-  UNIQUE KEY `email_UNIQUE` (`email`)
+  UNIQUE KEY `email_UNIQUE` (`email`),
+  CONSTRAINT `fk_users_people` FOREIGN KEY (`id`) REFERENCES `tbl_people` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 ```
 
@@ -79,9 +92,9 @@ CREATE TABLE `tbl_users` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_roles` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `role` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_roles PRIMARY KEY (`id`),
   UNIQUE KEY `role_UNIQUE` (`role`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 ```
@@ -93,7 +106,7 @@ CREATE TABLE `tbl_roles` (
 CREATE TABLE `tbl_user_roles` (
   `user_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
-  PRIMARY KEY (`user_id`,`role_id`),
+  CONSTRAINT pk_user_roles PRIMARY KEY (`user_id`,`role_id`),
   KEY `fk_user_roles_roles_idx` (`role_id`),
   CONSTRAINT `fk_user_roles_roles` FOREIGN KEY (`role_id`) REFERENCES `tbl_roles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_user_roles_users` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -105,11 +118,11 @@ CREATE TABLE `tbl_user_roles` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_tokens` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `token` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL,
   `expiry_date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_tokens PRIMARY KEY (`id`),
   UNIQUE KEY `token_UNIQUE` (`token`),
   KEY `fk_tokens_users_idx` (`user_id`),
   CONSTRAINT `fk_tokens_users` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -121,13 +134,13 @@ CREATE TABLE `tbl_tokens` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_posts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `user_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_posts PRIMARY KEY (`id`),
   KEY `fk_posts_users_idx` (`user_id`),
   CONSTRAINT `fk_posts_users` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -138,13 +151,13 @@ CREATE TABLE `tbl_posts` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `content` text NOT NULL,
   `user_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_comments PRIMARY KEY (`id`),
   KEY `fk_comments_users_idx` (`user_id`),
   KEY `fk_comments_posts_idx` (`post_id`),
   CONSTRAINT `fk_comments_posts` FOREIGN KEY (`post_id`) REFERENCES `tbl_posts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -157,10 +170,10 @@ CREATE TABLE `tbl_comments` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_likes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_likes PRIMARY KEY (`id`),
   KEY `fk_likes_users_idx` (`user_id`),
   KEY `fk_likes_posts_idx` (`post_id`),
   CONSTRAINT `fk_likes_posts` FOREIGN KEY (`post_id`) REFERENCES `tbl_posts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -173,10 +186,10 @@ CREATE TABLE `tbl_likes` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_follows` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `follower_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_follows PRIMARY KEY (`id`),
   KEY `fk_follows_users_idx` (`user_id`),
   KEY `fk_follows_users1_idx` (`follower_id`),
   CONSTRAINT `fk_follows_users` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -189,7 +202,7 @@ CREATE TABLE `tbl_follows` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_notifications` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `follower_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
@@ -199,7 +212,7 @@ CREATE TABLE `tbl_notifications` (
   `is_read` tinyint(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_notifications PRIMARY KEY (`id`),
   KEY `fk_notifications_users_idx` (`user_id`),
   KEY `fk_notifications_users1_idx` (`follower_id`),
   KEY `fk_notifications_posts_idx` (`post_id`),
@@ -218,14 +231,14 @@ CREATE TABLE `tbl_notifications` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chats` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `receiver_id` int(11) NOT NULL,
   `message` text NOT NULL,
   `is_read` tinyint(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chats PRIMARY KEY (`id`),
   KEY `fk_chats_users_idx` (`user_id`),
   KEY `fk_chats_users1_idx` (`receiver_id`),
   CONSTRAINT `fk_chats_users` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -238,14 +251,14 @@ CREATE TABLE `tbl_chats` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_lists` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `receiver_id` int(11) NOT NULL,
   `last_message` text NOT NULL,
   `is_read` tinyint(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chat_lists PRIMARY KEY (`id`),
   KEY `fk_chat_lists_users_idx` (`user_id`),
   KEY `fk_chat_lists_users1_idx` (`receiver_id`),
   CONSTRAINT `fk_chat_lists_users` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -258,14 +271,14 @@ CREATE TABLE `tbl_chat_lists` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_messages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `chat_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `message` text NOT NULL,
   `is_read` tinyint(1) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chat_messages PRIMARY KEY (`id`),
   KEY `fk_chat_messages_chats_idx` (`chat_id`),
   KEY `fk_chat_messages_users_idx` (`user_id`),
   CONSTRAINT `fk_chat_messages_chats` FOREIGN KEY (`chat_id`) REFERENCES `tbl_chats` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -278,12 +291,12 @@ CREATE TABLE `tbl_chat_messages` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_blocks` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `block_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chat_blocks PRIMARY KEY (`id`),
   KEY `fk_chat_blocks_users_idx` (`user_id`),
   KEY `fk_chat_blocks_users1_idx` (`block_id`),
   CONSTRAINT `fk_chat_blocks_users` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -296,12 +309,12 @@ CREATE TABLE `tbl_chat_blocks` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_mutes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `mute_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chat_mutes PRIMARY KEY (`id`),
   KEY `fk_chat_mutes_users_idx` (`user_id`),
   KEY `fk_chat_mutes_users1_idx` (`mute_id`),
   CONSTRAINT `fk_chat_mutes_users` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -314,13 +327,13 @@ CREATE TABLE `tbl_chat_mutes` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_reports` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `report_id` int(11) NOT NULL,
   `message` text NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chat_reports PRIMARY KEY (`id`),
   KEY `fk_chat_reports_users_idx` (`user_id`),
   KEY `fk_chat_reports_users1_idx` (`report_id`),
   CONSTRAINT `fk_chat_reports_users` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -333,12 +346,12 @@ CREATE TABLE `tbl_chat_reports` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_message_files` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `chat_message_id` int(11) NOT NULL,
   `file` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chat_message_files PRIMARY KEY (`id`),
   KEY `fk_chat_message_files_chat_messages_idx` (`chat_message_id`),
   CONSTRAINT `fk_chat_message_files_chat_messages` FOREIGN KEY (`chat_message_id`) REFERENCES `tbl_chat_messages` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -349,13 +362,13 @@ CREATE TABLE `tbl_chat_message_files` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_message_reactions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `chat_message_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `reaction` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chat_message_reactions PRIMARY KEY (`id`),
   KEY `fk_chat_message_reactions_chat_messages_idx` (`chat_message_id`),
   KEY `fk_chat_message_reactions_users_idx` (`user_id`),
   CONSTRAINT `fk_chat_message_reactions_chat_messages` FOREIGN KEY (`chat_message_id`) REFERENCES `tbl_chat_messages` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -368,13 +381,13 @@ CREATE TABLE `tbl_chat_message_reactions` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_message_replies` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `chat_message_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `message` text NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chat_message_replies PRIMARY KEY (`id`),
   KEY `fk_chat_message_replies_chat_messages_idx` (`chat_message_id`),
   KEY `fk_chat_message_replies_users_idx` (`user_id`),
   CONSTRAINT `fk_chat_message_replies_chat_messages` FOREIGN KEY (`chat_message_id`) REFERENCES `tbl_chat_messages` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -387,12 +400,12 @@ CREATE TABLE `tbl_chat_message_replies` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_message_reply_files` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `chat_message_reply_id` int(11) NOT NULL,
   `file` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chat_message_reply_files PRIMARY KEY (`id`),
   KEY `fk_chat_message_reply_files_chat_message_replies_idx` (`chat_message_reply_id`),
   CONSTRAINT `fk_chat_message_reply_files_chat_message_replies` FOREIGN KEY (`chat_message_reply_id`) REFERENCES `tbl_chat_message_replies` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -403,13 +416,13 @@ CREATE TABLE `tbl_chat_message_reply_files` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_message_reply_reactions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` binary(16) NOT NULL AUTO_INCREMENT,
   `chat_message_reply_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `reaction` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  CONSTRAINT pk_chat_message_reply_reactions PRIMARY KEY (`id`),
   KEY `fk_chat_message_reply_reactions_chat_message_replies_idx` (`chat_message_reply_id`),
   KEY `fk_chat_message_reply_reactions_users_idx` (`user_id`),
   CONSTRAINT `fk_chat_message_reply_reactions_chat_message_replies` FOREIGN KEY (`chat_message_reply_id`) REFERENCES `tbl_chat_message_replies` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
