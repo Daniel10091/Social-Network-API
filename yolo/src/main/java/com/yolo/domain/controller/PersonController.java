@@ -78,14 +78,18 @@ public class PersonController {
   }
 
   @PostMapping("/users")
-  public ResponseEntity<PersonDTO> registerPerson(@RequestBody PersonDTO personDTO) throws PersonAlreadyExistException {
+  public ResponseEntity<PersonDTO> registerPerson(
+      @RequestBody PersonDTO personDTO
+    ) throws PersonAlreadyExistException {
     var newPerson = personService.registerPerson(personDTO);
     return ResponseEntity.ok(PersonMapper.toDto(newPerson));
   }
 
   @PutMapping("/users/{id}")
-  public ResponseEntity<PersonDTO> updatePerson(@PathVariable(value = "code") UUID code,
-      @RequestBody PersonDTO personDTO) throws Exception {
+  public ResponseEntity<PersonDTO> updatePerson(
+      @PathVariable(value = "code") UUID code,
+      @RequestBody PersonDTO personDTO
+    ) throws Exception {
     var updatedPerson = personService.updatePerson(personDTO);
     return ResponseEntity.ok(PersonMapper.toDto(updatedPerson));
   }
