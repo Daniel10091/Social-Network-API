@@ -15,13 +15,13 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 public class DefaultSecurityConfig {
 
-  @Bean
-  @ConditionalOnMissingBean(UserDetailsService.class)
-  InMemoryUserDetailsManager inMemoryUserDetailsManager() { 
-    String generatedPassword = "password";
-    return new InMemoryUserDetailsManager(User.withUsername("user")
-        .password(generatedPassword).roles("ROLE_USER").build());
-  }
+  // @Bean
+  // @ConditionalOnMissingBean(UserDetailsService.class)
+  // InMemoryUserDetailsManager inMemoryUserDetailsManager() { 
+  //   String generatedPassword = "password";
+  //   return new InMemoryUserDetailsManager(User.withUsername("user")
+  //       .password(generatedPassword).roles("ROLE_USER").build());
+  // }
 
   @Bean
   @ConditionalOnMissingBean(AuthenticationEventPublisher.class)

@@ -15,7 +15,7 @@ public class BeanConfig {
   @Bean
   PersonMapper personMapper() throws Exception {
     WebClient webClient = WebClient.builder()
-        .baseUrl("http://localhost:8080")
+        .baseUrl("http://localhost:8084")
         .build();
     HttpServiceProxyFactory factory = HttpServiceProxyFactory
         .builder(WebClientAdapter.forClient(webClient)).build();
@@ -25,7 +25,7 @@ public class BeanConfig {
   @Bean
   PersonRepository personRepository() throws Exception {
     WebClient webClient = WebClient.builder()
-        .baseUrl("http://localhost:8080")
+        .baseUrl("http://localhost:8084")
         .build();
     HttpServiceProxyFactory factory = HttpServiceProxyFactory
         .builder(WebClientAdapter.forClient(webClient)).build();

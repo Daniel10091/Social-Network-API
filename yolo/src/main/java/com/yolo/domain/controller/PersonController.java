@@ -59,7 +59,7 @@ public class PersonController {
     return "I am deleting " + s;
   }
 
-  @RolesAllowed("ROLE_USER")
+  // @RolesAllowed("ROLE_USER")
   @GetMapping("/users")
   public ResponseEntity<List<PersonDTO>> getPeople() {
     List<Person> people = personService.getPeople();
