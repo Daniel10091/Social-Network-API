@@ -1,11 +1,11 @@
-package com.yolo.domain.config.ServicesInterface;
+package com.yolo.domain.service.interfaces;
 
 import java.util.List;
 
 import com.yolo.domain.entity.dto.PersonDTO;
 import com.yolo.domain.entity.model.Person;
 
-public interface PersonService {
+public interface PersonServiceInterface {
   
   /**
    * @return

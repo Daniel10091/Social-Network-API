@@ -6,7 +6,7 @@ CREATE DATABASE `db_yolo` WITH OWNER = postgres ENCODING = 'UTF8' TABLESPACE = p
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_people` (
-  `id` BINARY(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(45) NOT NULL,
   `last_name` varchar(45) NOT NULL,
   `gender` varchar(1) DEFAULT "N" NOT NULL,
@@ -24,9 +24,9 @@ CREATE TABLE `tbl_people` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_phones` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `phone` varchar(45) NOT NULL,
-  `person_id` binary(16) NOT NULL,
+  `person_id` int(16) NOT NULL,
   CONSTRAINT pk_phones PRIMARY KEY (`id`),
   KEY `fk_phones_persons_idx` (`person_id`),
   CONSTRAINT `fk_phones_persons` FOREIGN KEY (`person_id`) REFERENCES `tbl_people` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -38,9 +38,9 @@ CREATE TABLE `tbl_phones` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_emails` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `email` varchar(45) NOT NULL,
-  `person_id` binary(16) NOT NULL,
+  `person_id` int(16) NOT NULL,
   CONSTRAINT pk_emails PRIMARY KEY (`id`),
   KEY `fk_emails_persons_idx` (`person_id`),
   CONSTRAINT `fk_emails_persons` FOREIGN KEY (`person_id`) REFERENCES `tbl_people` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -52,13 +52,13 @@ CREATE TABLE `tbl_emails` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_addresses` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   -- `address` varchar(45) NOT NULL,
   `street` varchar(100) NOT NULL,
   `city` varchar(100) NOT NULL,
   `state` varchar(100) NOT NULL,
   `zip` varchar(100) NOT NULL,
-  `person_id` binary(16) NOT NULL,
+  `person_id` int(16) NOT NULL,
   CONSTRAINT pk_address PRIMARY KEY (`id`),
   KEY `fk_addresses_persons_idx` (`person_id`),
   CONSTRAINT `fk_addresses_persons` FOREIGN KEY (`person_id`) REFERENCES `tbl_people` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -70,7 +70,7 @@ CREATE TABLE `tbl_addresses` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_users` (
-  `id` binary(16) NOT NULL,
+  `id` int(16) NOT NULL,
   `avatar` LONGBLOB NOT NULL,
   `background` LONGBLOB NOT NULL,
   `username` varchar(45) NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE `tbl_users` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_roles` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `role` varchar(45) NOT NULL,
   CONSTRAINT pk_roles PRIMARY KEY (`id`),
   UNIQUE KEY `role_UNIQUE` (`role`)
@@ -118,7 +118,7 @@ CREATE TABLE `tbl_user_roles` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_tokens` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `token` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL,
   `expiry_date` datetime NOT NULL,
@@ -134,7 +134,7 @@ CREATE TABLE `tbl_tokens` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_posts` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE `tbl_posts` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_comments` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `content` text NOT NULL,
   `user_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
@@ -170,7 +170,7 @@ CREATE TABLE `tbl_comments` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_likes` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
   CONSTRAINT pk_likes PRIMARY KEY (`id`),
@@ -186,7 +186,7 @@ CREATE TABLE `tbl_likes` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_follows` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `follower_id` int(11) NOT NULL,
   CONSTRAINT pk_follows PRIMARY KEY (`id`),
@@ -202,7 +202,7 @@ CREATE TABLE `tbl_follows` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_notifications` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `follower_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL,
@@ -231,7 +231,7 @@ CREATE TABLE `tbl_notifications` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chats` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `receiver_id` int(11) NOT NULL,
   `message` text NOT NULL,
@@ -251,7 +251,7 @@ CREATE TABLE `tbl_chats` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_lists` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `receiver_id` int(11) NOT NULL,
   `last_message` text NOT NULL,
@@ -271,7 +271,7 @@ CREATE TABLE `tbl_chat_lists` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_messages` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `chat_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `message` text NOT NULL,
@@ -291,7 +291,7 @@ CREATE TABLE `tbl_chat_messages` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_blocks` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `block_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
@@ -309,7 +309,7 @@ CREATE TABLE `tbl_chat_blocks` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_mutes` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `mute_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
@@ -327,7 +327,7 @@ CREATE TABLE `tbl_chat_mutes` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_reports` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `report_id` int(11) NOT NULL,
   `message` text NOT NULL,
@@ -346,7 +346,7 @@ CREATE TABLE `tbl_chat_reports` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_message_files` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `chat_message_id` int(11) NOT NULL,
   `file` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL,
@@ -362,7 +362,7 @@ CREATE TABLE `tbl_chat_message_files` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_message_reactions` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `chat_message_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `reaction` varchar(255) NOT NULL,
@@ -381,7 +381,7 @@ CREATE TABLE `tbl_chat_message_reactions` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_message_replies` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `chat_message_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `message` text NOT NULL,
@@ -400,7 +400,7 @@ CREATE TABLE `tbl_chat_message_replies` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_message_reply_files` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `chat_message_reply_id` int(11) NOT NULL,
   `file` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL,
@@ -416,7 +416,7 @@ CREATE TABLE `tbl_chat_message_reply_files` (
 ```sql
 -- Path: src\main\resources\database.sql
 CREATE TABLE `tbl_chat_message_reply_reactions` (
-  `id` binary(16) NOT NULL AUTO_INCREMENT,
+  `id` int(16) NOT NULL AUTO_INCREMENT,
   `chat_message_reply_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `reaction` varchar(255) NOT NULL,

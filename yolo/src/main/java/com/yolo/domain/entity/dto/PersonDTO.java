@@ -2,7 +2,6 @@ package com.yolo.domain.entity.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import com.yolo.domain.entity.model.Person;
 
@@ -15,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class PersonDTO {
 
-  private UUID code;
+  private Long code;
   private String firstName;
   private String lastName;
   private LocalDate birthDate;

@@ -1,7 +1,6 @@
 package com.yolo.domain.entity.dto;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserDTO {
   
-  private UUID code;
+  private Long code;
   private byte[] avatar;
   private byte[] background;
   private String username;

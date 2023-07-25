@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.yolo.domain.config.ServicesInterface.PersonService;
 import com.yolo.domain.entity.dto.PersonDTO;
 import com.yolo.domain.entity.mapper.PersonMapper;
 import com.yolo.domain.entity.model.Person;
 import com.yolo.domain.exception.PersonAlreadyExistException;
 import com.yolo.domain.exception.PersonNotFoundException;
+import com.yolo.domain.service.PersonServiceImpl;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.websocket.server.PathParam;
@@ -28,9 +28,9 @@ import jakarta.websocket.server.PathParam;
 @RequestMapping(value = "/api/v1")
 public class PersonController {
 
-  private final PersonService personService;
+  private final PersonServiceImpl personService;
 
-  public PersonController(PersonService personService) {
+  public PersonController(PersonServiceImpl personService) {
     this.personService = personService;
   }
 

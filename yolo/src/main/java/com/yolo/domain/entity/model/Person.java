@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -36,7 +35,7 @@ public class Person {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private UUID id;
+  private Long id;
   
   @Column(name = "first_name", nullable = false)
   private String firstName;

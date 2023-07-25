@@ -5,20 +5,20 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.yolo.domain.config.ServicesInterface.PersonService;
 import com.yolo.domain.entity.dto.PersonDTO;
 import com.yolo.domain.entity.mapper.PersonMapper;
 import com.yolo.domain.entity.model.Person;
 import com.yolo.domain.exception.PersonAlreadyExistException;
 import com.yolo.domain.exception.PersonNotFoundException;
 import com.yolo.domain.repository.PersonRepository;
+import com.yolo.domain.service.interfaces.PersonServiceInterface;
 import com.yolo.domain.utils.PasswordUtil;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class PersonServiceImpl implements PersonService {
+public class PersonServiceImpl implements PersonServiceInterface {
 
   private final PersonRepository personRepository;
 

@@ -1,7 +1,6 @@
 package com.yolo.domain.entity.model;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -14,7 +13,7 @@ public class Phone {
   
   @Id
   @Column(name = "id", nullable = false)
-  private UUID id;
+  private Long id;
   
   @ManyToOne
   @JoinColumn(name = "person_id")
