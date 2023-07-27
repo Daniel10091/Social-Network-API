@@ -1,7 +1,6 @@
 package com.yolo.domain.controller;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
@@ -19,18 +18,17 @@ import com.yolo.domain.entity.mapper.PersonMapper;
 import com.yolo.domain.entity.model.Person;
 import com.yolo.domain.exception.PersonAlreadyExistException;
 import com.yolo.domain.exception.PersonNotFoundException;
-import com.yolo.domain.service.PersonServiceImpl;
+import com.yolo.domain.service.PersonService;
 
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping(value = "/api/v1")
 public class PersonController {
 
-  private final PersonServiceImpl personService;
+  private final PersonService personService;
 
-  public PersonController(PersonServiceImpl personService) {
+  public PersonController(PersonService personService) {
     this.personService = personService;
   }
 
@@ -87,7 +85,7 @@ public class PersonController {
 
   @PutMapping("/users/{id}")
   public ResponseEntity<PersonDTO> updatePerson(
-      @PathVariable(value = "code") UUID code,
+      @PathVariable(value = "code") Long code,
       @RequestBody PersonDTO personDTO
     ) throws Exception {
     var updatedPerson = personService.updatePerson(personDTO);

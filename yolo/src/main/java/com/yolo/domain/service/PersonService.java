@@ -11,33 +11,29 @@ import com.yolo.domain.entity.model.Person;
 import com.yolo.domain.exception.PersonAlreadyExistException;
 import com.yolo.domain.exception.PersonNotFoundException;
 import com.yolo.domain.repository.PersonRepository;
-import com.yolo.domain.service.interfaces.PersonServiceInterface;
 import com.yolo.domain.utils.PasswordUtil;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class PersonServiceImpl implements PersonServiceInterface {
+public class PersonService {
 
   private final PersonRepository personRepository;
 
-  public PersonServiceImpl(PersonRepository personRepository) {
+  public PersonService(PersonRepository personRepository) {
     this.personRepository = personRepository;
   }
 
-  @Override
   public List<Person> getPeople() {
     return personRepository.findAll();
   }
 
-  @Override
   public Person findPersonById(Long id) {
     return personRepository.findPersonById(id)
         .orElseThrow(() -> new PersonNotFoundException("Pessoa com o id: " + id + " não foi encontrada"));
   }
 
-  @Override
   public Person registerPerson(PersonDTO personDTO) {
     Person saveReturn = null;
     Person newPerson = new Person();
@@ -73,12 +69,10 @@ public class PersonServiceImpl implements PersonServiceInterface {
     return saveReturn;
   }
 
-  @Override
   public Person updatePerson(PersonDTO personDTO) {
     return null;
   }
 
-  @Override
   public void deletePerson(Long id) {
     personRepository.deleteById(id);
   }

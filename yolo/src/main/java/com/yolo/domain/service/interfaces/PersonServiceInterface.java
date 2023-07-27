@@ -1,6 +1,7 @@
 package com.yolo.domain.service.interfaces;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.yolo.domain.entity.dto.PersonDTO;
 import com.yolo.domain.entity.model.Person;
@@ -16,7 +17,7 @@ public interface PersonServiceInterface {
    * @param id
    * @return
    */
-  public Person findPersonById(Long id);
+  public Optional<Person> findPersonById(Long id);
 
   /**
    * @param personDTO
